@@ -40,6 +40,8 @@
 
 $route['default_controller'] = "main";
 $route['404_override'] = '';
+$route['welcome'] = "/main/welcome";
+$route['addpoke(:any)'] = "/main/addpoke/$1";
 
 
 

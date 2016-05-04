@@ -19,13 +19,14 @@ class Register_model extends CI_Model {
 
 		$this->form_validation->set_rules("password", "password", "trim|required|min_length[8]|matches[conpassword]");	
 		if($this->form_validation->run()===FALSE){
-			$this->session->set_flashdata('badpassword', "Must be 8 characters long and matching.");
+			$this->session->set_flashdata('badpassword', "Password must be 8 characters long and matching.");
 			redirect('/');
 		}	
 		else {
+			$a = 0;
+		$query = "INSERT INTO users(name, alias, email, dob, password, poke_count, created_at) values (?,?,?,?,?,?,?)";
+		$values = array($user['name'], $user['alias'], $user['email'], $user['dob'], $user['password'], 0, date("Y-m-d, H:i:s"));
 
-		$query = "INSERT INTO users(first_name, last_name, email, password, created_at, updated_at, salt) values (?,?,?,?,?,?,?)";
-		$values = array($user['first_name'], $user['last_name'], $user['email'], $user['password'], date("Y-m-d, H:i:s"), date("Y-m-d, H:i:s"), $user['salt']);
 		return $this->db->query($query, $values);
 		}
 	}

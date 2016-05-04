@@ -11,12 +11,18 @@
 
 <div class="container">
 	<div class="row">
+	
 		<div class="five columns">
-			<h3>Login</h3>
-						
-			<?=$this->session->flashdata('destroy'); ?>
-
-			<form action="/logins/check" method="post">
+			<form role="form" action="/registers/add" method="post" class="u-pull-left">
+				<h3>Register</h3>
+				<div class="form-group">
+					<label for="name">Name: </label>
+					<input type="text" class="form-control" name="name">
+				</div>		
+				<div class="form-group">
+					<label for="alias">Alias: </label>
+					<input type="text" class="form-control" name="alias">
+				</div>		
 				<div class="form-group">
 					<label for="email">Email: </label>
 					<input type="text" class="form-control" name="email">
@@ -25,31 +31,11 @@
 					<label for="password">Password: </label>
 					<input type="password" class="form-control" name="password">
 				</div>
-							<?=$this->session->flashdata('loginfail'); ?>
-				<button type="submit" class="button-primary">Login</button>
-			</form>
-		</div>
-
-		<div class="two columns">
-		<br><br><br><br><br><br><br>
-		<h2 class="u-pull-left">OR</h2>
-		</div>
-
-		<div class="five columns">
-			<form role="form" action="/registers/add" method="post" class="u-pull-right">
-				<h3>Register</h3>
 				<div class="form-group">
-					<label for="first_name">First name: </label>
-					<input type="text" class="form-control" name="first_name">
-				</div>		
-				<div class="form-group">
-					<label for="last_name">Last name: </label>
-					<input type="text" class="form-control" name="last_name">
-				</div>		
-				<div class="form-group">
-					<label for="email">Email: </label>
-					<input type="text" class="form-control" name="email">
+					<label for="conpassword">Confirm password: </label>
+					<input type="password" class="form-control" name="conpassword">
 				</div>
+
 
 				<div class="form-group">
 					<label for="dob">Date of Birthday: </label>
@@ -58,7 +44,7 @@
 						<option value="<?= $i?>"><?= $i?></option>
 						<?php }?>
 					</select>
-					<select name="date">
+					<select name="day">
 						<?php for($i=1; $i<32; $i++){ ?>
 						<option value="<?= $i?>"><?= $i?></option>
 						<?php }?>
@@ -69,21 +55,45 @@
 						<?php }?>
 					</select>
 
-					
+					<?=$this->session->flashdata('dob');?>
 				</div>
 
-				<div class="form-group">
-					<label for="password">Password: </label>
-					<input type="password" class="form-control" name="password">
-				</div>
-				<div class="form-group">
-					<label for="conpassword">Confirm password: </label>
-					<input type="password" class="form-control" name="conpassword">
-				</div>
+
 				<button type="submit" class="button-primary">Register</button>
+						<?=$this->session->flashdata('name'); ?>
+						<?=$this->session->flashdata('alias'); ?>
+						<?=$this->session->flashdata('email'); ?>
+						
 						<?=$this->session->flashdata('bademail'); ?>
 						<?=$this->session->flashdata('badpassword'); ?>
 			</form>
+		</div>
+
+		<div class="two columns">
+		<br><br><br><br><br><br><br>
+		<h2 class="u-pull-left">OR</h2>
+		</div>
+
+			<?=$this->session->flashdata('destroy'); ?>
+
+		<div class="five columns u-pull-right">
+			<h3>Login</h3>
+						
+
+			<form action="/logins/check" method="post">
+				<div class="form-group">
+					<label for="email">Email: </label>
+					<input type="text" class="form-control" name="email1">
+				</div>
+				<div class="form-group">
+					<label for="password">Password: </label>
+					<input type="password" class="form-control" name="password1">
+				</div>
+				<button type="submit" class="button-primary">Login</button>
+			</form>
+							<?=$this->session->flashdata('loginfail'); ?>
+							<?=$this->session->flashdata('email1'); ?>
+							<?=$this->session->flashdata('password1'); ?>
 		</div>
 	</div> <!--end of row -->
 </div> <!--end of container -->

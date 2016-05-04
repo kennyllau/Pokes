@@ -4,91 +4,76 @@ class Registers extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->model("Register_model");
+		$this->load->model("Login_model");
 	}
 
 	public function add(){
 
-		$dob ='';
+		$dob = '';
 
 		$info = $this->input->post();
 
-		if($info['month'] < 10 && $info['date'] < 10){
 
+		if(checkdate($info['month'], $info['day'], $info['year']) === false){
+			$this->session->set_flashdata('dob', 'not a valid birthday');
+			redirect('/');
+		}
+		if($info['month'] < 10 && $info['day'] < 10){
 			$month = '0' .$info['month'];
-			$date = '0' . $info['date'];
-
-			$dob = $month. "/" .$date. "/" .$info['year'];
-			
-		
+			$day = '0' . $info['day'];
+			$dob = $month. "/" .$day. "/" .$info['year'];		
 		}
 
-		if($info['month'] >= 10 && $info['date'] < 10){
+		if($info['month'] >= 10 && $info['day'] < 10){
 			$month = $info['month'];
-			$date= '0' . $info['date'];
+			$day= '0' . $info['day'];
 			$year = $info['year'];
-
-			$dob= $month. "/" .$date. "/" .$year;
-
+			$dob= $month. "/" .$day. "/" .$year;
 		}
 
-		if($info['month'] < 10 && $info['date'] >= 10){
+		if($info['month'] < 10 && $info['day'] >= 10){
 			$month = '0' .$info['month'];
-
-			$dob = $month. "/" .$info['date']. "/" .$info['year'];
+			$dob = $month. "/" .$info['day']. "/" .$info['year'];
 		}
 
-
-
-		var_dump($info['email']);
-		die();
-		// else{
-		// 	$dob += $info['month'];
-		// }
-
-		// if($info['date']< 10){
-		// 	$date= '0'.$info['date'];
-		// 	$dob += .$date;
-		// }
-		// else{
-		// 	$dob += .$info['date'];
-		// }
-
-
-
+		if($this->input->post('name') == null){
+		 	$this->session->set_flashdata('name', 'name cannot be empty');
+		 	redirect('/');
+		 }
+		 if($this->input->post('alias') == null){
+		 	$this->session->set_flashdata('alias', 'alias cannot be empty');
+		 	redirect('/');
+		 }
+		 if($this->input->post('email') == null){
+		 	$this->session->set_flashdata('email', 'email cannot be empty');
+		 	redirect('/');
+		 }
 		
 
-
-
-		// var_dump($dob);
-		// die();
-
-
-
-
-
+			
 		$enc_password=md5($this->input->post('password'));
 		$data = array(
-			"first_name" => $info['first_name'],
-			"last_name" => $info['last_name'],
+			"name" => $info['name'],
+			"alias" => $info['alias'],
 			"email" => $info['email'],
+			"dob" => $dob,
 			"password" => $enc_password
 			);
 
 		$user_added = $this->Register_model->add_user($data);
 
+		$email = $info['email'];
+
+		$id = $this->Register_model->get_user_by_email($email);
+
 		if($user_added){
 
-			$user = $this->Login_model->get_user_by_email($info['email']);
-
-			$usersession = array(
-				'id'=>$user['id'],
-				'first_name' => $user['first_name'],
-				'last_name' => $user['last_name'],
-				'email' => $user['email'],
-				'is_logged_in' => true
-				);
-			$this->session->set_userdata('info', $usersession);
-			redirect('/welcome_page');
+			$this->session->set_userdata('id', $id['id']);
+			$this->session->set_userdata('name', $info['name']);
+			$this->session->set_userdata('alias', $info['alias']);
+			$this->session->set_userdata('dob', $dob);
+			$this->session->set_userdata('email', $info['email']);
+			redirect('/welcome');
 		}	
 	}
 
